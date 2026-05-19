@@ -165,16 +165,18 @@ function exportCsv() {
 async function handleFiles(fileList) {
   const status = document.getElementById("status");
   status.classList.remove("hidden", "error", "ok");
+  const before = ALL_RESULTS.length;
   status.textContent = `Processing ${fileList.length} file(s)…`;
-  ALL_RESULTS = [];
+  // Append, don't replace — so the user can drop more files later without losing previous results.
   try {
     for (const f of fileList) {
       const r = await processFile(f);
       ALL_RESULTS.push(...r);
     }
     render(ALL_RESULTS);
+    const added = ALL_RESULTS.length - before;
     status.classList.add("ok");
-    status.textContent = `Done. ${ALL_RESULTS.length} submission(s) graded.`;
+    status.textContent = `Added ${added} result(s). Total graded: ${ALL_RESULTS.length}.`;
   } catch (e) {
     console.error(e);
     status.classList.add("error");
@@ -186,7 +188,9 @@ function setupUI() {
   const drop = document.getElementById("drop-zone");
   const input = document.getElementById("file-input");
 
-  drop.addEventListener("click", () => input.click());
+  // No click handler on the drop-zone — it's a <label for="file-input">, so the native
+  // label behavior opens the picker exactly once.  An extra click handler here would
+  // bubble alongside the label's native click and cause the picker to re-open.
   drop.addEventListener("dragover", e => { e.preventDefault(); drop.classList.add("dragover"); });
   drop.addEventListener("dragleave", () => drop.classList.remove("dragover"));
   drop.addEventListener("drop", e => {
@@ -194,7 +198,12 @@ function setupUI() {
     drop.classList.remove("dragover");
     handleFiles([...e.dataTransfer.files]);
   });
-  input.addEventListener("change", e => handleFiles([...e.target.files]));
+  input.addEventListener("change", e => {
+    const files = [...e.target.files];
+    // Reset so the same file can be re-uploaded later if needed.
+    e.target.value = "";
+    handleFiles(files);
+  });
 
   document.getElementById("export-csv").addEventListener("click", exportCsv);
   document.getElementById("clear-btn").addEventListener("click", () => {

@@ -16,11 +16,11 @@
 </header>
 
 <main>
-  <section id="drop-zone" class="drop-zone">
+  <label id="drop-zone" class="drop-zone" for="file-input">
     <p class="drop-msg"><strong>Drag &amp; drop</strong> Excel files or a ZIP here</p>
-    <p class="drop-sub">or <label for="file-input" class="file-link">click to browse</label></p>
+    <p class="drop-sub">or click to browse — you can drop more files later, they append</p>
     <input type="file" id="file-input" multiple accept=".xlsx,.xlsm,.zip" hidden>
-  </section>
+  </label>
 
   <section id="status" class="status hidden"></section>
 
