@@ -19,15 +19,18 @@ async function loadRubrics() {
 async function processXlsx(file) {
   const buf = await file.arrayBuffer();
   const wb = XLSX.read(buf, { type: "array", cellFormula: false });
-  const rubric = Grader.detectExercise(wb, RUBRICS);
-  if (!rubric) {
-    return {
+  const matched = Grader.detectAllExercises(wb, RUBRICS);
+  if (matched.length === 0) {
+    return [{
       filename: file.name,
       error: `No matching exercise. Sheets found: [${wb.SheetNames.join(", ")}]`
-    };
+    }];
   }
-  const graded = Grader.gradeWorkbook(wb, rubric);
-  return { filename: file.name, ...graded };
+  // One result per detected exercise (a single xlsx may contain several).
+  return matched.map(rubric => ({
+    filename: file.name,
+    ...Grader.gradeWorkbook(wb, rubric)
+  }));
 }
 
 async function processZip(file) {
@@ -40,8 +43,8 @@ async function processZip(file) {
     try {
       const blob = await e.async("blob");
       const fakeFile = new File([blob], e.name);
-      const result = await processXlsx(fakeFile);
-      out.push(result);
+      const results = await processXlsx(fakeFile);   // array
+      out.push(...results);
     } catch (err) {
       out.push({ filename: e.name, error: String(err) });
     }
@@ -52,7 +55,7 @@ async function processZip(file) {
 async function processFile(file) {
   const name = file.name.toLowerCase();
   if (name.endsWith(".zip")) return await processZip(file);
-  if (name.endsWith(".xlsx") || name.endsWith(".xlsm")) return [await processXlsx(file)];
+  if (name.endsWith(".xlsx") || name.endsWith(".xlsm")) return await processXlsx(file);
   return [{ filename: file.name, error: "Unsupported file type." }];
 }
 

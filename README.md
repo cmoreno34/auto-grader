@@ -4,7 +4,7 @@ Browser-only grader for the practice Excel exercises. The teacher (or each stude
 
 ## Supported exercises
 
-Detection is automatic from the sheet names of the uploaded file:
+Detection is automatic from the sheet names of the uploaded file. **A single xlsx that contains sheets from several exercises is graded once per detected exercise** — useful when a student delivers one consolidated workbook instead of five separate ones, or when some exercises are missing.
 
 | Exercise              | Detect-by sheets                                                 | MC questions  |
 |-----------------------|------------------------------------------------------------------|---------------|

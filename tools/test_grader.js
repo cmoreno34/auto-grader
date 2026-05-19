@@ -82,6 +82,25 @@ function main() {
   console.log(lines.join("\n"));
   console.log("");
   console.log(`Summary: ${passed} passed, ${failed} failed, of ${files.length} files.`);
+
+  // ---- Multi-exercise detection check ----
+  const fakeWb = {
+    SheetNames: [
+      // schelling sheets
+      "Schelling_Template", "Dynamics_Template",
+      // kmeans sheets
+      "Student - WCSS k=3", "Student - Silhouette",
+      // logit sheets
+      "PART A&B · Template", "LOGIT · Template"
+    ]
+  };
+  const matched = Grader.detectAllExercises(fakeWb, rubrics);
+  const matchedIds = matched.map(r => r.exercise_id).sort();
+  const expected = ["kmeans", "logit", "schelling"].sort();
+  const multiOk = JSON.stringify(matchedIds) === JSON.stringify(expected);
+  console.log(`\nMulti-detect: ${multiOk ? "PASS" : "FAIL"}  got [${matchedIds.join(", ")}]  expected [${expected.join(", ")}]`);
+  if (!multiOk) failed++;
+
   process.exit(failed === 0 ? 0 : 1);
 }
 

@@ -349,6 +349,15 @@
     return null;
   }
 
+  // Returns every rubric whose required sheets are all present in this workbook.
+  // A single xlsx may contain several exercises (e.g. a student copied multiple
+  // exercise sheets into one workbook) — return one rubric per match.
+  function detectAllExercises(wb, rubrics) {
+    return rubrics.filter(r =>
+      r.detect_by_sheet.every(name => wb.SheetNames.includes(name))
+    );
+  }
+
   function gradeWorkbook(wb, rubric) {
     const results = [];
     let total = 0, maxTotal = 0;
@@ -364,6 +373,7 @@
   return {
     gradeWorkbook,
     detectExercise,
+    detectAllExercises,
     gradeQuestion,
     getOptionLabel,
     // Exposed for tests:
