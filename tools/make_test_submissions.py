@@ -1,8 +1,9 @@
 """
-Generate synthetic test submissions from each template, with three variants:
-  - _perfect.xlsx  : answer cells filled with the correct values  (should grade 100%)
-  - _wrong.xlsx    : answer cells filled with a wrong option       (should grade 0%)
-  - _blank.xlsx    : answer cells left empty                       (should grade 0%, status=blank)
+Generate synthetic test submissions from each template, with four variants:
+  - _perfect.xlsx   : answer cells filled with the correct values  (should grade 100%)
+  - _wrong.xlsx     : answer cells filled with a known wrong option (should grade 0%)
+  - _attempted.xlsx : answer cells filled with values that match NO option (should grade 50%)
+  - _blank.xlsx     : answer cells left empty                       (should grade 0%, status=blank)
 """
 
 from __future__ import annotations
@@ -161,6 +162,43 @@ def _find_option_value(q, letter):
     return _find_option(q, letter).get("value")
 
 
+def value_for_attempted(q):
+    """Write a value that does NOT match any option — simulates the student doing some work
+    but landing on a number/string that isn't among the listed answers."""
+    t = q["type"]
+    if t == "numeric_choice":
+        # Pick something well outside every option's value
+        far = max(abs(o["value"]) for o in q["options"]) * 10 + 999
+        return q["ref_sheet"], [(q["ref_cell"], far)]
+    if t == "string_choice":
+        return q["ref_sheet"], [(q["ref_cell"], "ZZZZZZZZZZZZZZZ")]
+    if t == "text_choice":
+        return q["ref_sheet"], [(q["ref_cell"], "MAYBE")]
+    if t == "range_choice":
+        far = max(r["max"] for r in q["ranges"]) + 10
+        return q["ref_sheet"], [(q["ref_cell"], far)]
+    if t == "grid_row_contains":
+        # Fill grid with a single letter that isn't in required_letters
+        required = set(L.upper() for L in q["required_letters"])
+        filler = next((c for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" if c not in required), "Z")
+        import re
+        from openpyxl.utils import get_column_letter, column_index_from_string
+        m = re.match(r"^([A-Z]+)(\d+):([A-Z]+)(\d+)$", q["grid_range"])
+        c1, r1, c2, r2 = m.group(1), int(m.group(2)), m.group(3), int(m.group(4))
+        cs = column_index_from_string(c1)
+        ce = column_index_from_string(c2)
+        cells = []
+        for r in range(r1, r2 + 1):
+            for ci in range(cs, ce + 1):
+                cells.append((f"{get_column_letter(ci)}{r}", filler))
+        return q["ref_sheet"], cells
+    if t == "string_tuple_choice":
+        return q["ref_sheet"], [(c, "ZZZ") for c in q["ref_cells"]]
+    # argmax_choice and freq_pair_choice always fall into one of the defined cases,
+    # so there's no "attempted" intermediate state — skip them here.
+    return q.get("ref_sheet"), []
+
+
 def write_cells(src: Path, dst: Path, plan: list[tuple[str, list[tuple[str, object]]]]):
     shutil.copy(src, dst)
     wb = openpyxl.load_workbook(dst)
@@ -183,21 +221,25 @@ def main():
             continue
         print(f"\n{ex_id}: using template {tpl.name}")
 
-        perfect_plan, wrong_plan = [], []
+        perfect_plan, wrong_plan, attempted_plan = [], [], []
         for q in rubric["mc_questions"]:
             if q.get("type") == "manual" or "correct" not in q:
                 continue  # nothing to populate for purely-conceptual questions
             ps, pcells = value_for_correct(q)
             ws_, wcells = value_for_wrong(q)
+            as_, acells = value_for_attempted(q)
             if pcells:
                 perfect_plan.append((ps, pcells))
             if wcells:
                 wrong_plan.append((ws_, wcells))
+            if acells:
+                attempted_plan.append((as_, acells))
 
         write_cells(tpl, OUT / f"{ex_id}_perfect.xlsx", perfect_plan)
         write_cells(tpl, OUT / f"{ex_id}_wrong.xlsx", wrong_plan)
+        write_cells(tpl, OUT / f"{ex_id}_attempted.xlsx", attempted_plan)
         shutil.copy(tpl, OUT / f"{ex_id}_blank.xlsx")
-        print(f"  wrote {ex_id}_perfect.xlsx, {ex_id}_wrong.xlsx, {ex_id}_blank.xlsx")
+        print(f"  wrote {ex_id}_perfect.xlsx, {ex_id}_wrong.xlsx, {ex_id}_attempted.xlsx, {ex_id}_blank.xlsx")
 
 
 if __name__ == "__main__":

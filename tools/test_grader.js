@@ -53,20 +53,26 @@ function main() {
     if (f.endsWith("_perfect.xlsx")) expected = "perfect";
     else if (f.endsWith("_wrong.xlsx")) expected = "wrong";
     else if (f.endsWith("_blank.xlsx")) expected = "blank";
+    else if (f.endsWith("_attempted.xlsx")) expected = "attempted";
     else expected = "?";
 
     // Ignore manual / conceptual questions in the assertion — they can never be auto-graded.
     const autoGraded = g.results.filter(r => r.status !== "manual");
-    const allCorrect = autoGraded.every(r => r.status === "correct");
-    const noneCorrect = autoGraded.every(r => r.status !== "correct" && r.status !== "partial");
+    const allCorrect  = autoGraded.every(r => r.status === "correct");
+    const allWrong    = autoGraded.every(r => r.status === "wrong");
+    const noneScored  = autoGraded.every(r => r.grade === 0);
+    // 'attempted' submissions write garbage values; not every type supports the
+    // attempted state (argmax / freq_pair always land on a discrete letter).
+    // The acceptance bar: at least one question got the attempted/partial credit
+    // AND no question was graded correct (we wrote garbage values, not correct ones).
+    const someAttempted = autoGraded.some(r => r.status === "attempted" || r.status === "partial");
+    const noneCorrectStrict = autoGraded.every(r => r.status !== "correct");
 
-    // For "blank" and "wrong" we just require that no auto-gradable question scored points.
-    // (Some templates ship with a few non-answer cells pre-populated, which
-    // the grader will faithfully reflect in its decision — that's expected.)
     let ok = false;
-    if (expected === "perfect") ok = allCorrect;
-    else if (expected === "blank") ok = noneCorrect;
-    else if (expected === "wrong") ok = noneCorrect;
+    if (expected === "perfect")        ok = allCorrect;
+    else if (expected === "blank")     ok = noneScored;
+    else if (expected === "wrong")     ok = allWrong;
+    else if (expected === "attempted") ok = someAttempted && noneCorrectStrict;
 
     const flag = ok ? "PASS" : "FAIL";
     if (ok) passed++; else failed++;

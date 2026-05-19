@@ -78,7 +78,18 @@ Each `rubrics/<exercise>.json` describes the multiple-choice questions for one e
 | `string_tuple_choice` | Reads several cells as a tuple, compares against tuple options                                        |
 | `freq_pair_choice`    | Reads a `(pos, neg)` frequency pair, classifies into 4 cases                                          |
 
-If a cell is empty the question is reported as `blank` (no points, no penalty). Near-correct numeric values can earn 50% credit via `tolerance_fuzzy_pct`.
+### How credit is awarded
+
+| Student's Excel cell                                                | Status        | Credit |
+|---------------------------------------------------------------------|---------------|--------|
+| Matches the correct option exactly (within `tolerance_abs`)         | `correct`     | 100%   |
+| Close to the correct option (within `tolerance_fuzzy_pct`)          | `partial`     | 50%    |
+| Has a value that doesn't match any option (computed but off-target) | `attempted`   | **50%** |
+| Matches a specific *wrong* option (would have picked it in Canvas)  | `wrong`       | 0%     |
+| Empty / placeholder like `(compute)`                                | `blank`       | 0%     |
+| Conceptual question — no Excel ref                                  | `manual`      | n/a    |
+
+The `attempted` rule encodes the teacher's policy: *if there's a number in the cell that came from a real procedure, give 50% even if the final value isn't one of the listed options.*
 
 ## Testing
 
@@ -88,10 +99,11 @@ python tools/make_test_submissions.py    # writes test_submissions/*.xlsx
 node tools/test_grader.js                # 12 PASS, 0 FAIL
 ```
 
-`make_test_submissions.py` generates three variants per exercise:
-- `*_perfect.xlsx` — answer cells set to the correct value → expected 100%
-- `*_wrong.xlsx`   — answer cells set to a deliberately wrong option → expected 0%
-- `*_blank.xlsx`   — the bare template, untouched → expected 0% (blanks)
+`make_test_submissions.py` generates four variants per exercise:
+- `*_perfect.xlsx`   — answer cells set to the correct value → expected 100%
+- `*_wrong.xlsx`     — answer cells set to a deliberately wrong option → expected 0%
+- `*_attempted.xlsx` — answer cells set to a value that matches *no* option → expected 50%
+- `*_blank.xlsx`     — the bare template, untouched → expected 0% (blanks)
 
 ## Adding a new exercise
 

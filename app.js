@@ -60,12 +60,13 @@ async function processFile(file) {
 
 function statusBadge(status) {
   const map = {
-    correct: { cls: "status-correct", txt: "✓ correct" },
-    partial: { cls: "status-partial", txt: "≈ partial" },
-    wrong:   { cls: "status-wrong",   txt: "✗ wrong" },
-    blank:   { cls: "status-blank",   txt: "— blank" },
-    unknown: { cls: "status-unknown", txt: "? unknown" },
-    manual:  { cls: "status-manual",  txt: "manual" }
+    correct:   { cls: "status-correct", txt: "✓ correct" },
+    partial:   { cls: "status-partial", txt: "≈ close (50%)" },
+    attempted: { cls: "status-partial", txt: "~ attempted (50%)" },
+    wrong:     { cls: "status-wrong",   txt: "✗ wrong" },
+    blank:     { cls: "status-blank",   txt: "— blank" },
+    unknown:   { cls: "status-unknown", txt: "? unknown" },
+    manual:    { cls: "status-manual",  txt: "manual" }
   };
   const m = map[status] || map.unknown;
   return `<span class="${m.cls}">${m.txt}</span>`;

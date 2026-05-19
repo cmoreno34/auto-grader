@@ -306,13 +306,21 @@
     } else if (answer.letter === "manual") {
       status = "manual";
     } else if (answer.letter === "unknown") {
-      status = "unknown";
+      // Cell had something we couldn't parse (e.g. garbage text in a numeric field).
+      // Treated as an attempt: 50% credit.
+      grade = pointsEach / 2;
+      status = "attempted";
     } else if (answer.letter === q.correct) {
       grade = answer.partial ? pointsEach / 2 : pointsEach;
       status = answer.partial ? "partial" : "correct";
     } else if (answer.letter === "no_match") {
-      status = "wrong";
+      // Student computed *something* (a real value), but it doesn't match any option.
+      // We can't tell which letter they'd pick in Canvas — but they clearly attempted,
+      // so we credit 50%.  Per teacher's instruction.
+      grade = pointsEach / 2;
+      status = "attempted";
     } else {
+      // Student's value matches a specific wrong option — they'd pick that letter in Canvas.
       grade = 0;
       status = "wrong";
     }
