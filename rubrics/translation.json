@@ -1,0 +1,94 @@
+{
+  "exercise_id": "translation",
+  "display_name": "Translation (Procrustes K-NN)",
+  "source_file_hint": "exercise4_translation_template_template_v1_exam final 2026.xlsx",
+  "detect_by_sheet": ["EX5_STEP_A_TPL", "EX5_STEP_B_TPL", "EX5_STEP_C_TPL", "EX5_STEP_D_TPL"],
+  "mc_points_each": 2,
+  "mc_questions": [
+    {
+      "id": "Q1",
+      "question": "STEP A: (XR)₁ for the word 'car' with R=identity (x=[1,1,1])",
+      "ref_sheet": "EX5_STEP_A_TPL",
+      "ref_cell": "F14",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 0},
+        {"letter": "B", "value": 1},
+        {"letter": "C", "value": 2},
+        {"letter": "D", "value": 3}
+      ],
+      "correct": "B",
+      "tolerance_abs": 0.05,
+      "tolerance_fuzzy_pct": 5
+    },
+    {
+      "id": "Q2",
+      "question": "STEP B: initial Frobenius loss ||A||_F with R=identity",
+      "ref_sheet": "EX5_STEP_B_TPL",
+      "ref_cell": "C11",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 2.4495},
+        {"letter": "B", "value": 3},
+        {"letter": "C", "value": 3.4641},
+        {"letter": "D", "value": 4.6578}
+      ],
+      "correct": "C",
+      "tolerance_abs": 0.01,
+      "tolerance_fuzzy_pct": 5
+    },
+    {
+      "id": "Q3",
+      "question": "STEP C: gradient entry G[1,3] = (2/m)·Σₖ X_k[1]·A_k[3]",
+      "ref_sheet": "EX5_STEP_C_TPL",
+      "ref_cell": "E17",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": -3},
+        {"letter": "B", "value": -1.5},
+        {"letter": "C", "value": 0},
+        {"letter": "D", "value": 3}
+      ],
+      "correct": "A",
+      "tolerance_abs": 0.05,
+      "tolerance_fuzzy_pct": 5
+    },
+    {
+      "id": "Q4",
+      "question": "STEP C: updated R_new[2,1] after one gradient step with α=0.1",
+      "ref_sheet": "EX5_STEP_C_TPL",
+      "ref_cell": "C25",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 0},
+        {"letter": "B", "value": 0.15},
+        {"letter": "C", "value": 0.3},
+        {"letter": "D", "value": 1}
+      ],
+      "correct": "B",
+      "tolerance_abs": 0.01,
+      "tolerance_fuzzy_pct": 5
+    },
+    {
+      "id": "Q5",
+      "question": "STEP D: nearest French neighbour to bird·R_true = [2,2,2]",
+      "ref_sheet": "EX5_STEP_D_TPL",
+      "ref_cell": "C22",
+      "type": "string_choice",
+      "options": [
+        {"letter": "A", "value": "voiture"},
+        {"letter": "B", "value": "chat"},
+        {"letter": "C", "value": "oiseau"},
+        {"letter": "D", "value": "poisson"}
+      ],
+      "correct": "C",
+      "normalize": "upper_strip"
+    },
+    {
+      "id": "Q6",
+      "question": "BONUS: if α=1.0 instead of 0.1, what happens to the loss after one step?",
+      "type": "manual",
+      "note": "Conceptual question — no Excel cell carries this answer. Reported as 'manual'."
+    }
+  ]
+}

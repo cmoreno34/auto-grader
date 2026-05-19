@@ -1,0 +1,64 @@
+{
+  "exercise_id": "crito",
+  "display_name": "Cryptography (Playfair + Rail Fence)",
+  "source_file_hint": "crito_template.xlsx",
+  "detect_by_sheet": ["1. Playfair", "2. Rail Fence"],
+  "mc_points_each": 2,
+  "mc_questions": [
+    {
+      "id": "Q1",
+      "question": "Playfair ciphertext for BALLOON AT DAWN with key SECURITY",
+      "ref_sheet": "1. Playfair",
+      "ref_cell": "B36",
+      "type": "string_choice",
+      "options": [
+        {"letter": "A", "value": "IBOQMPPOBYHING"},
+        {"letter": "B", "value": "BALLONATDAWNXX"},
+        {"letter": "C", "value": "IBOQMPPOBYHIN"},
+        {"letter": "D", "value": "DAFSAFCFPMHQNG"}
+      ],
+      "correct": "A",
+      "normalize": "upper_strip"
+    },
+    {
+      "id": "Q2",
+      "question": "Which row of the Playfair grid (key SECURITY) contains D, F, G, H, K?",
+      "ref_sheet": "1. Playfair",
+      "type": "grid_row_contains",
+      "grid_range": "B18:F22",
+      "required_letters": ["D", "F", "G", "H", "K"],
+      "row_to_letter": {"1": "A", "2": "B", "3": "C", "4": "D"},
+      "correct": "C"
+    },
+    {
+      "id": "Q3",
+      "question": "Rail decomposition of MMDETETANEAW with 3 rails (= same as the encryption rails of MEETMEATDAWN)",
+      "ref_sheet": "2. Rail Fence",
+      "type": "string_tuple_choice",
+      "ref_cells": ["B27", "B28", "B29"],
+      "options": [
+        {"letter": "A", "values": ["MMD", "ETETAN", "EAW"]},
+        {"letter": "B", "values": ["MME", "DET", "ETANEAW"]},
+        {"letter": "C", "values": ["MMDE", "TETA", "NEAW"]},
+        {"letter": "D", "values": ["MMDETET", "ANEA", "W"]}
+      ],
+      "correct": "A",
+      "normalize": "upper_strip"
+    },
+    {
+      "id": "Q4",
+      "question": "Rail Fence ciphertext for MEET ME AT DAWN with 3 rails",
+      "ref_sheet": "2. Rail Fence",
+      "ref_cell": "B31",
+      "type": "string_choice",
+      "options": [
+        {"letter": "A", "value": "MEETMEATDAWN"},
+        {"letter": "B", "value": "MMDETETANEAW"},
+        {"letter": "C", "value": "NWADTAEMTEEM"},
+        {"letter": "D", "value": "MDMEAETTNWEA"}
+      ],
+      "correct": "B",
+      "normalize": "upper_strip"
+    }
+  ]
+}

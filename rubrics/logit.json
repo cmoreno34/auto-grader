@@ -1,0 +1,88 @@
+{
+  "exercise_id": "logit",
+  "display_name": "Logistic Regression & Sentiment",
+  "source_file_hint": "exercise1_logit_sentiment_v3_stempalte.xlsx",
+  "detect_by_sheet": ["PART A&B · Template", "LOGIT · Template"],
+  "mc_points_each": 2,
+  "mc_questions": [
+    {
+      "id": "Q1",
+      "question": "Feature vector value for tweet T1 = 'love film great' (positive frequency sum x₁)",
+      "ref_sheet": "PART A&B · Template",
+      "ref_cell": "F31",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 1},
+        {"letter": "B", "value": 2},
+        {"letter": "C", "value": 3},
+        {"letter": "D", "value": 4}
+      ],
+      "correct": "C",
+      "tolerance_abs": 0.5,
+      "tolerance_fuzzy_pct": 0
+    },
+    {
+      "id": "Q2",
+      "question": "hθ for the FIRST tweet at iteration 0",
+      "ref_sheet": "LOGIT · Template",
+      "ref_cell": "K25",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 0.50},
+        {"letter": "B", "value": 0.57},
+        {"letter": "C", "value": 0.43},
+        {"letter": "D", "value": 0.70}
+      ],
+      "correct": "B",
+      "tolerance_abs": 0.01,
+      "tolerance_fuzzy_pct": 5
+    },
+    {
+      "id": "Q3",
+      "question": "Regularised cost J_reg at iteration 0",
+      "ref_sheet": "LOGIT · Template",
+      "ref_cell": "O29",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 0.5548},
+        {"letter": "B", "value": 0.5948},
+        {"letter": "C", "value": 0.6087},
+        {"letter": "D", "value": 0.6487}
+      ],
+      "correct": "B",
+      "tolerance_abs": 0.005,
+      "tolerance_fuzzy_pct": 5
+    },
+    {
+      "id": "Q4",
+      "question": "New θ₁ after one gradient-descent step",
+      "ref_sheet": "LOGIT · Template",
+      "ref_cell": "V31",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 0.4000},
+        {"letter": "B", "value": 0.4036},
+        {"letter": "C", "value": 0.4145},
+        {"letter": "D", "value": 0.3855}
+      ],
+      "correct": "B",
+      "tolerance_abs": 0.001,
+      "tolerance_fuzzy_pct": 5
+    },
+    {
+      "id": "Q5",
+      "question": "Statement about 'film' in the vocabulary",
+      "ref_sheet": "PART A&B · Template",
+      "ref_cells_pair": ["C20", "D20"],
+      "type": "freq_pair_choice",
+      "options": [
+        {"letter": "A", "logic": "pos>0 and neg==0", "description": "strong positive only"},
+        {"letter": "B", "logic": "pos==0 and neg>0", "description": "strong negative only"},
+        {"letter": "C", "logic": "pos>0 and neg>0", "description": "appears in both"},
+        {"letter": "D", "logic": "pos==0 and neg==0", "description": "not in vocabulary"}
+      ],
+      "correct": "C",
+      "note": "Reads PosFreq at C15 and NegFreq at D15 (the 'film' row). Maps to letter based on which counts are nonzero."
+    }
+  ]
+}

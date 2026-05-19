@@ -1,0 +1,69 @@
+{
+  "exercise_id": "kmeans",
+  "display_name": "k-Means & Silhouette",
+  "source_file_hint": "exam k and silloutte_template.xlsx",
+  "detect_by_sheet": ["Student - WCSS k=3", "Student - Silhouette"],
+  "mc_points_each": 2,
+  "mc_questions": [
+    {
+      "id": "Q1",
+      "question": "Total WCSS for k = 3 (C1={A,D,G}, C2={B,C,E}, C3={F,H})",
+      "ref_sheet": "Student - WCSS k=3",
+      "ref_cell": "B49",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 8.5},
+        {"letter": "B", "value": 13.83},
+        {"letter": "C", "value": 14.85},
+        {"letter": "D", "value": 20.94}
+      ],
+      "correct": "B",
+      "tolerance_abs": 0.05,
+      "tolerance_fuzzy_pct": 5
+    },
+    {
+      "id": "Q2",
+      "question": "Which cluster contributes the MOST to total WCSS?",
+      "ref_sheet": "Student - WCSS k=3",
+      "type": "argmax_choice",
+      "compare_cells": [
+        {"cell": "B32", "letter_if_max": "A", "label": "WCSS₁ (C1)"},
+        {"cell": "B40", "letter_if_max": "B", "label": "WCSS₂ (C2)"},
+        {"cell": "B47", "letter_if_max": "C", "label": "WCSS₃ (C3)"}
+      ],
+      "equal_threshold_pct": 5,
+      "equal_letter": "D",
+      "correct": "C"
+    },
+    {
+      "id": "Q3",
+      "question": "a(C) — average distance from C to other members of its cluster {B,E}",
+      "ref_sheet": "Student - Silhouette",
+      "ref_cell": "B46",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 1.0},
+        {"letter": "B", "value": 1.207},
+        {"letter": "C", "value": 1.414},
+        {"letter": "D", "value": 2.466}
+      ],
+      "correct": "B",
+      "tolerance_abs": 0.01,
+      "tolerance_fuzzy_pct": 5
+    },
+    {
+      "id": "Q4",
+      "question": "Silhouette interpretation for point C (s(C) ≈ 0.51)",
+      "ref_sheet": "Student - Silhouette",
+      "ref_cell": "B63",
+      "type": "range_choice",
+      "ranges": [
+        {"min": -1.01, "max": -0.05, "letter": "A", "description": "misclassified (s < 0)"},
+        {"min": -0.05, "max": 0.1,   "letter": "B", "description": "on boundary (s ≈ 0)"},
+        {"min": 0.1,   "max": 1.01,  "letter": "C", "description": "well placed (s > 0.1)"}
+      ],
+      "correct": "C",
+      "note": "Maps the computed s value to an interpretation letter. Option D (undefined) is unreachable from a numeric s and is only credited if the cell is blank or non-numeric."
+    }
+  ]
+}

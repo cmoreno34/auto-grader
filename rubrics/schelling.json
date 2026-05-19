@@ -1,0 +1,72 @@
+{
+  "exercise_id": "schelling",
+  "display_name": "Schelling Segregation",
+  "source_file_hint": "schelling_ exam_template.xlsx",
+  "detect_by_sheet": ["Schelling_Template", "Dynamics_Template"],
+  "mc_points_each": 2,
+  "mc_questions": [
+    {
+      "id": "Q1",
+      "question": "TOTAL number of RICH people (B) in the district",
+      "ref_sheet": "Schelling_Template",
+      "ref_cell": "I18",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 150},
+        {"letter": "B", "value": 148},
+        {"letter": "C", "value": 152},
+        {"letter": "D", "value": 300}
+      ],
+      "correct": "B",
+      "tolerance_abs": 0.5,
+      "tolerance_fuzzy_pct": 5
+    },
+    {
+      "id": "Q2",
+      "question": "|b/B − y/Y| for a RED block",
+      "ref_sheet": "Schelling_Template",
+      "ref_cell": "F30",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 0.0258},
+        {"letter": "B", "value": 0.0676},
+        {"letter": "C", "value": 0.0009},
+        {"letter": "D", "value": 0.1}
+      ],
+      "correct": "A",
+      "tolerance_abs": 0.001,
+      "tolerance_fuzzy_pct": 10
+    },
+    {
+      "id": "Q3",
+      "question": "Number of X's 8 neighbors that are RICH (Scenario 1, INITIAL)",
+      "ref_sheet": "Dynamics_Template",
+      "ref_cell": "I15",
+      "type": "numeric_choice",
+      "options": [
+        {"letter": "A", "value": 1},
+        {"letter": "B", "value": 2},
+        {"letter": "C", "value": 3},
+        {"letter": "D", "value": 5}
+      ],
+      "correct": "B",
+      "tolerance_abs": 0.5,
+      "tolerance_fuzzy_pct": 0
+    },
+    {
+      "id": "Q4",
+      "question": "In Scenario 3 (GENESIS), what does X decide to do?",
+      "ref_sheet": "Dynamics_Template",
+      "ref_cell": "I40",
+      "type": "text_choice",
+      "options": [
+        {"letter": "A", "keyword": "STAY"},
+        {"letter": "B", "keyword": "MOVE"},
+        {"letter": "C", "keyword": "STAY"},
+        {"letter": "D", "keyword": "MOVE"}
+      ],
+      "correct": "B",
+      "note": "Cannot distinguish between A↔C (both STAY) or B↔D (both MOVE) from cell alone. If student writes MOVE we credit B (the correct option)."
+    }
+  ]
+}

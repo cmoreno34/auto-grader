@@ -1,0 +1,3 @@
+{
+  "rubrics": ["schelling", "logit", "kmeans", "crito", "translation"]
+}
